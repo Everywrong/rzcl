@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="js/echarts.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+<div id="chartmain" style="width:1120px;height:614px"></div>
+<script>
+    var arr;
+    var nums=[];
+    var values=[];
+    //alert(123);
+    $.ajax({
+        url:"http://127.0.0.1:8080/article",
+        async:false,
+        type:"get",
+        dataType:"json",
+        success:function(data){
+            arr=data;
+        }
+    });
+    for(var i=0;i<arr.length;i++){
+        nums.push(arr[i].id);
+        values.push(arr[i].count);
+    }
+    var option = {
+        title : {
+            text: '文章TOPN'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        legend: {},
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType: {show: true, type: ['line', 'bar']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        calculable : true,
+        xAxis : [
+            {
+                type : 'category',
+                data : nums
+            }
+        ],
+        yAxis : [
+            {
+                type : 'value',
+                boundaryGap : [0, 0.01]
+            }
+        ],
+        series : [
+            {
+                name:'文章统计',
+                type:'bar',
+                data:values
+            }
+        ]
+    };
+
+
+    var myChart=echarts.init(document.getElementById('chartmain'))
+    //使用制定的配置项和数据显示图表
+    myChart.setOption(option);
+</script>
+<div style="align:center"><button formaction="main.html" >返回</button> </div>
+</body>
+</html>
